@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import './detail.dart';
+
+
+class MovieList extends StatefulWidget {
+
+  const MovieList({Key? key , required this.mt}) : super(key: key);
+  final String mt;
+
+  @override
+
+  _MovieListStage createState(){
+    return _MovieListStage();
+  }
+}
+
+
+class _MovieListStage extends State<MovieList>
+    with AutomaticKeepAliveClientMixin{//状態を保つ
+  var url = [
+    "https://movies-pctr.c.yimg.jp/dk/iwiz-movies/pict/p/p/56/ee/186803_01.jpg?w=680",
+    "https://movies-pctr.c.yimg.jp/dk/iwiz-movies/pict/p/p/46/be/187051_01.jpg?w=680",
+    "https://movies-pctr.c.yimg.jp/dk/iwiz-movies/pict/p/p/57/23/186925_02.jpg",];
+  int length=3;
+  var title =["スパイダーマンノーウェイホーム", "劇場版 呪術廻戦 0", "あなたの番です 劇場版",];
+  var publication = ["2021年12月17日", "2021年12月24日", "2021年12月10日",];
+  var cast = ["トムホラン、ゼンデイヤ等", "緒方恵美、花澤香菜、中村悠一等", "田中圭、西野七瀬、原田知世等",];
+  var genre = ["アクション、SF、ファンタジー","アニメ、アクション、ファンタジー","サスペンス、ミステリー",];
+  String _hot= "この映画の人気度は";
+  int counter=0;
+  @override
+  bool get wantKeepAlive => true;//関数定義
+  Widget build(BuildContext context) {
+    return ListView.builder(itemCount: length,itemBuilder: (BuildContext ctx, int i){  //每循环一次拿一个i放一个item进去
+      var mitem = url[i];
+      var miteem = title[i];
+      return GestureDetector(onTap: (){          //タッチすると別の画面に遷移する 事件起こす
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext ctx){
+          return   MovieDetail(title:miteem);//画面の指定
+        }));
+      },
+        child: Container(
+          height: 300,
+          decoration: const BoxDecoration(color: Colors.white,border: Border(top: BorderSide(color: Colors.black26))), //加变宽
+          child: Row(children: [
+            Image.network(mitem,width: 150,height: 400,fit:BoxFit.cover),
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              height: 300,
+              child: Column(
+                crossAxisAlignment:CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('映画名:${title[i]}',style: const TextStyle(fontSize: 11.5),),
+                  Text('公開日:${publication[i]}',style: const TextStyle(fontSize: 11.5),),
+                  Text('キャスト:${cast[i]}',style: const TextStyle(fontSize: 11.5),),
+                  Text('ジャンル:${genre[i]}',style: const TextStyle(fontSize: 11.5),),
+                  Text(_hot),
+                  ElevatedButton(onPressed: _onClick, child:const Icon(Icons.favorite, color: Colors.red,),),
+                ],) ,
+            ),
+          ],),
+        ),);
+    },);
+  }    //movielist見fdsfjkljl
+
+
+  void _onClick (){
+    setState(() {
+      counter++;
+     _hot=("この映画の人気度は：$counter");
+    });
+  }
+  }
